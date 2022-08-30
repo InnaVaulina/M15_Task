@@ -1,0 +1,60 @@
+﻿<Window x:Class="M15_Task.WindowClientChoice"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:M15_Task"
+        mc:Ignorable="d"
+        Title="Список клиентов" Height="450" Width="400"
+        Top="0" Left="800">
+    <Window.Resources>
+      
+
+        <!--селектор для выбора шаблонов для списка клиентов-->
+        <local:TemplateSelectorClientList x:Key="myClientListTemplateSelector"               
+                                PersonTemplate="{StaticResource PersonTemplate}"
+                                OrganisationTemplate="{StaticResource OrganisationTemplate}"
+                                NullTemplate ="{StaticResource NullTemplate}"
+                                />
+
+        <!--селектор для выбора счет/депозит-->
+        <local:TempAccountSelector x:Key="myAccountSelector"               
+                                AccountTemplate="{StaticResource AccountTemplate}"
+                                DepositAccountTemplate="{StaticResource DepositAccountTemplate}"
+                                />
+    </Window.Resources>
+
+    <Grid Margin="5,5,5,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="5*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0">
+            <!--список клиентов-->
+            <ScrollViewer>
+                <ListBox x:Name="ClientList" ItemsSource="{Binding BankA_Clients}"
+                     SelectionChanged="ClientList_SelectionChanged" 
+                     ItemTemplateSelector="{StaticResource myClientListTemplateSelector}"/>
+            </ScrollViewer>
+        </StackPanel>
+
+        <!--счета выбранного клиента-->
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Счета:"/>
+            <ListBox x:Name="AccountList" 
+                     ItemTemplateSelector="{StaticResource myAccountSelector}"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2">
+
+            <TextBlock>
+                <Run>Касса:</Run> 
+                <Run Text="{Binding Cash.Balance, Mode=OneWay}" />
+            </TextBlock>
+
+        </StackPanel>
+
+    </Grid>
+</Window>
