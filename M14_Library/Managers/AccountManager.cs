@@ -98,15 +98,16 @@ namespace M14_Library
         /// <returns></returns>
         public bool MCloseAccount()
         {
-            try
-            //if (accountInWork != null)
+            //try
+            if (accountInWork != null)
             {
                 accountInWork.CloseAccount();
                 ClientChangesNotify?.Invoke(this, new ClientChangesEventArgs(client, "AccountClose", accountInWork.AccountNumber));
                 accountInWork = null;
                 return true;
             }
-            catch 
+            //catch 
+            else
             {
                 throw new MyExeption("Не выбран счет для работы.");
             }
