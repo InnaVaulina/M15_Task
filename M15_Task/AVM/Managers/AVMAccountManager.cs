@@ -77,27 +77,52 @@ namespace M15_Task
                 (o => { Manager.MNewAccount(); });
 
             closeAccount = new WeirdCommand
-                (o => { Manager.MCloseAccount(); });
+                (o =>
+                {
+                    try 
+                    {
+                        Manager.MCloseAccount();
+                    }
+                    catch (Exception e)
+                    {
+                        MistakeMessageNotify?.Invoke(this, new MistakeEventArgs($"Ошибка: >> {e.Message} {e.GetType().ToString()}"));
+                    }
+                });
 
             putMoneyToAccount = new WeirdCommand
-                (o => { Manager.MPutMoney(Amount); });
+                (o => 
+                { 
+                    try
+                    {
+                        Manager.MPutMoney(Amount);
+                    }
+                    catch (Exception e)
+                    {
+                        MistakeMessageNotify?.Invoke(this, new MistakeEventArgs($"Ошибка: >> {e.Message} {e.GetType().ToString()}"));
+                    }
+                });
 
             takeMoneyFromAccount = new WeirdCommand
                 (o =>
-                { 
-                    Manager.MTakeMoney(Amount);
-                    Manager.MTakeMoneyFromCash(Amount);  
+                {                     
+                    try
+                    {
+                        Manager.MTakeMoney(Amount);
+                        Manager.MTakeMoneyFromCash(Amount);
+                    }
+                    catch (Exception e)
+                    {
+                        MistakeMessageNotify?.Invoke(this, new MistakeEventArgs($"Ошибка: >> {e.Message} {e.GetType().ToString()}"));
+                    }
                 });
 
-            // теоретически две ошибки:
-            // счет отправителя не задан
-            // счет получателя не верный
+
             transfer = new WeirdCommand
                 (o =>
                 {                    
                         try 
                         {
-                        Manager.MTransfer(Manager.AccountInWork, PutAccountNomber, Amount);
+                        Manager.MTransfer(PutAccountNomber, Amount);
                         }
                         catch (Exception e)
                         {
